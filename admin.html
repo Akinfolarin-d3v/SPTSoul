@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - SptSouls</title>
+
+  <!-- Custom CSS Link -->
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <style>
+    .hidden {
+      display: none;
+}
+   /* Admin Container */
+.admin-container {
+  max-width: 480px;
+  margin: 80px auto;
+  padding: 30px 25px;
+  background: #1e1e1e;
+  border-radius: 5px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* Form Groups */
+.admin-container .form-group {
+  margin-bottom: 18px;
+}
+.admin-container .form-group label {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-bottom: 6px;
+  display: block;
+  color: #f1f1f1;
+}
+.admin-container .form-group input,
+.admin-container .form-group select {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 16px;
+  color: #eee;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
+  transition: border-color 0.2s ease;
+}
+.admin-container .form-group input:focus,
+.admin-container .form-group select:focus {
+  border-color: #c7a500;
+  outline: none;
+}
+
+/* Buttons */
+.btn-admin {
+  background: #c7a500;
+  color: #1e1e1e;
+  border-radius: 10px;
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background 0.2s ease;
+  padding: 1rem;
+  margin: 1rem;
+}
+.btn-admin:hover {
+  background: #e0b830;
+}
+
+/* Error Messages */
+.error-message {
+  margin-bottom: 12px;
+  color: #e74c3c;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+.error-message::before {
+  content: '';
+  margin-right: 6px;
+}
+
+/* Table */
+.product-list th, .product-list td {
+  padding: 12px;
+  border: 1px solid #444;
+}
+.product-list th {
+  background: #2a2a2a;
+  color: #c7a500;
+}
+.product-list td {
+  color: #eee;
+}
+
+  </style>
+</head>
+
+<body id="top">
+  <header class="header" data-header>
+    <div class="container">
+      <div class="overlay" data-overlay></div>
+      <a href="./index.html" class="logo">
+        <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65px" alt="Filmlane logo">
+      </a>
+      <div class="header-actions">
+        <button class="search-btn">
+          <ion-icon name="search-outline"></ion-icon>
+        </button>
+        <div class="lang-wrapper">
+          <label for="language">
+            <ion-icon name="globe-outline"></ion-icon>
+          </label>
+          <select name="language" id="language">
+            <option value="en">EN</option>
+            <option value="au">AU</option>
+            <option value="ar">AR</option>
+            <option value="tu">TU</option>
+          </select>
+        </div>
+        <button class="btn btn-primary">Sign in</button>
+      </div>
+      <button class="menu-open-btn" data-menu-open-btn>
+        <ion-icon name="reorder-two"></ion-icon>
+      </button>
+      <nav class="navbar" data-navbar>
+        <div class="navbar-top">
+          <a href="./index.html" class="logo">
+            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65px" alt="Filmlane logo">
+          </a>
+          <button class="menu-close-btn" data-menu-close-btn>
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+        <ul class="navbar-list">
+          <li>
+            <a href="./index.html" class="navbar-link">Home</a>
+          </li>
+          <li>
+            <a href="#" class="navbar-link">All Packs</a>
+          </li>
+          <li>
+            <a href="#" class="navbar-link">My Songs</a>
+          </li>
+          <li>
+            <a href="#" class="navbar-link">Merch</a>
+          </li>
+          <li>
+            <a href="#" class="navbar-link">Bio</a>
+          </li>
+        </ul>
+        <ul class="navbar-social-list">
+          <li>
+            <a href="#" class="navbar-social-link">
+              <ion-icon name="logo-twitter"></ion-icon>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="navbar-social-link">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="navbar-social-link">
+              <ion-icon name="logo-pinterest"></ion-icon>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="navbar-social-link">
+              <ion-icon name="logo-instagram"></ion-icon>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="navbar-social-link">
+              <ion-icon name="logo-youtube"></ion-icon>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="admin-container">
+    <!-- Login Section -->
+    <section id="login-section">
+      <h2>Admin Login</h2>
+      <div id="login-error" class="error-message"></div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="admin-username">Username</label>
+          <input type="text" id="admin-username" required>
+        </div>
+        <div class="form-group">
+          <label for="admin-password">Password</label>
+          <input type="password" id="admin-password" required>
+        </div>
+        <button type="submit" class="btn-admin">Login</button>
+      </form>
+    </section>
+
+    <!-- Product Section -->
+    <section id="product-section" class="hidden">
+      <h2>Manage Products</h2>
+      <div id="product-error" class="error-message"></div>
+      <form id="product-form">
+        <!-- section select, title, image… -->
+        <div class="form-group">
+          <label for="product-section-select">Select Section</label>
+          <select id="product-section-select" required>
+            <option value="">Select Section</option>
+            <option value="upcoming">New Pack</option>
+            <option value="top-rated">Top Rated Pack</option>
+            <option value="tv-series">Best Beats Pack</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="product-title">Product Title</label>
+          <input type="text" id="product-title" required>
+        </div>
+        <div class="form-group">
+          <label for="product-image">Upload Image</label>
+          <input type="file" id="product-image" accept="image/*" required>
+        </div>
+
+        <!-- Beats container -->
+        <div id="audio-inputs-container">
+          <div class="form-group audio-group">
+            <label>Beat Name</label>
+            <input type="text" name="beatNames[]" required>
+            <label>Demo Audio</label>
+            <input type="file" name="demoFiles[]" accept="audio/*" required>
+            <label>Full Audio</label>
+            <input type="file" name="fullFiles[]" accept="audio/*" required>
+            <button type="button" class="remove-audio-btn btn-admin">Remove Beat</button>
+          </div>
+        </div>
+        <button type="button" id="add-audio-btn" class="btn-admin">Add Another Beat</button>
+
+        <!-- Badge & Price -->
+        <div class="form-group">
+          <label for="product-badge">Badge Text</label>
+          <input type="text" id="product-badge" placeholder="e.g. New, Exclusive" required>
+        </div>
+        <div class="form-group">
+          <label for="product-price">Pack Price (USD)</label>
+          <input type="number" id="product-price" step="0.01" required>
+        </div>
+
+        <button type="submit" class="btn-admin">Save Product</button>
+      </form>
+
+      <h2>Existing Products</h2>
+      <table class="product-list" id="product-list">
+        <thead>
+          <tr>
+            <th>Section</th><th>Title</th><th>Badge</th><th>Price</th><th># Beats</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="product-list-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-brand-wrapper">
+          <a href="./index.html" class="logo">
+            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65px" alt="Filmlane logo">
+          </a>
+          <ul class="footer-list">
+            <li><a href="./index.html" class="footer-link">Home</a></li>
+            <li><a href="#" class="footer-link">All Packs</a></li>
+            <li><a href="#" class="footer-link">My Beats</a></li>
+            <li><a href="#" class="footer-link">Merch</a></li>
+            <li><a href="#" class="footer-link">About</a></li>
+          </ul>
+        </div>
+        <div class="divider"></div>
+        <div class="quicklink-wrapper">
+          <ul class="quicklink-list">
+            <li><a href="#" class="quicklink-link">Faq</a></li>
+            <li><a href="#" class="quicklink-link">Help center</a></li>
+            <li><a href="#" class="quicklink-link">Terms of use</a></li>
+            <li><a href="#" class="quicklink-link">Privacy</a></li>
+          </ul>
+          <ul class="social-list">
+            <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-pinterest"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="copyright">
+          &copy; 2025 <a href="https://www.folafolio.dev/">Akinfolarin.D3v</a>. All Rights Reserved
+        </p>
+        <img src="./assets/images/footer-bottom-img.png" alt="Online banking companies logo" class="footer-bottom-img">
+      </div>
+    </div>
+  </footer>
+
+  <!-- Inline beat-add/remove logic must come before admin.js -->
+  <script>
+    document.getElementById('add-audio-btn').addEventListener('click', () => {
+      const container = document.getElementById('audio-inputs-container');
+      const group = container.querySelector('.audio-group');
+      const clone = group.cloneNode(true);
+      clone.querySelectorAll('input').forEach(i => i.value = '');
+      container.appendChild(clone);
+    });
+    document.getElementById('audio-inputs-container').addEventListener('click', e => {
+      if (e.target.classList.contains('remove-audio-btn')) {
+        const groups = document.querySelectorAll('.audio-group');
+        if (groups.length > 1) e.target.closest('.audio-group').remove();
+      }
+    });
+  </script>
+
+  <!-- Single include of admin.js, after all DOM and inline scripts -->
+  <script src="./assets/js/admin.js"></script>
+
+  <!-- Ionicons (if you need them) -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
