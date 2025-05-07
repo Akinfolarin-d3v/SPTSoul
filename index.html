@@ -5,36 +5,31 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SptSouls</title>
- <!-- 
-    - favicon
-  -->
+
+  <!-- Favicon -->
   <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
-  <!-- 
-    - custom css link
-  -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="./assets/css/style.css" />
 
-  <!-- 
-    - google font link
-  -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 </head>
 <body id="top">
-<!-- 
-    - #HEADER
-  -->
 
+  <!-- IndexedDB Helpers -->
+  <script src="./assets/js/idb-helpers.js" defer></script>
+
+  <!-- HEADER -->
   <header class="header" data-header>
     <div class="container">
 
       <div class="overlay" data-overlay></div>
 
       <a href="./index.html" class="logo">
-        <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65px" alt="Filmlane logo">
+        <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65px" alt="SptSoul logo">
       </a>
 
       <div class="header-actions">
@@ -69,7 +64,7 @@
         <div class="navbar-top">
 
           <a href="./index.html" class="logo">
-            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="62px" alt="Filmlane logo">
+            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="62px" alt="SptSoul logo">
           </a>
 
           <button class="menu-close-btn" data-menu-close-btn>
@@ -144,268 +139,302 @@
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main>
-     <!-- 
-        - #HERO
-      -->
 
-      <section class="hero">
-        <div class="container">
 
-          <div class="hero-content">
+<!-- Cart Modal -->
+<div id="cart-modal" class="modal hidden">
+  <div class="modal-content cart-modal">
+    <button id="close-cart-modal" class="modal-close">&times;</button>
 
-            <p class="hero-subtitle"></p>
+    <!-- Header -->
+    <header class="cart-modal__header">
+      <h3>Your Cart</h3>
+      <span id="cart-count">0 items</span>
+    </header>
 
-            <h1 class="h1 hero-title">
-              Ordinary loops? Not here. <strong>Discover the guitar loop that redefines </strong> your vibe.
-            </h1>
+    <!-- Body -->
+    <section class="cart-modal__body" id="cart-items">
+      <!-- Items injected here -->
+    </section>
 
-            <div class="meta-wrapper">
-
-              <div class="badge-wrapper">
-                <div class="badge badge-fill">Exclusives</div>
-
-                <div class="badge badge-outline">Only</div>
-              </div>
-              <br>
-              <br>
-              <br>
-
-              <div class="ganre-wrapper">
-                <a href="#">Afro |</a>
-
-                <a href="#">| Drill</a>
-              </div>
-
-              <div class="date-time">
-
-                <div>
-                  <ion-icon name="calendar-outline"></ion-icon>
-
-                  <time datetime="2022">Updated </time>
-                </div>
-
-                <div>
-                  <ion-icon name="time-outline"></ion-icon>
-
-                  <time datetime="PT128M">28/04/2025</time>
-                </div>
-
-              </div>
-
-            </div>
-
-            <button class="btn btn-primary">
-              <ion-icon name="play"></ion-icon>
-
-              <span>All Packs</span>
-            </button>
-
-          </div>
-
-        </div>
-      </section>
-       <!-- Product Modal -->
-  <!-- Product Preview Modal (keep only this one!) -->
-<div id="product-modal" class="modal hidden">
-  <div class="modal-content">
-    <!-- Close button -->
-    <button id="close-product-modal" class="modal-close">&times;</button>
-
-    <!-- Product image -->
-    <img    id="modal-product-image" src="" alt="">
-
-    <!-- Title & badge -->
-    <h3     id="modal-product-title"></h3>
-    <span   id="modal-product-badge" class="badge badge-fill"></span>
-
-    <!-- Price -->
-    <p>Price: $<span id="modal-product-price"></span></p>
-
-    <!-- Audio demos list -->
-    <div id="modal-audio-list"></div>
-
-    <!-- Add to cart button -->
-    <button id="modal-add-to-cart" class="btn btn-primary">
-      Add to Cart
-    </button>
+    <!-- Footer -->
+    <footer class="cart-modal__footer">
+      <div class="cart-total">
+        Total: $<span id="cart-total">0.00</span>
+      </div>
+      <button id="checkout-btn" class="btn btn-primary">
+        Checkout
+      </button>
+      <button id="download-btn" class="btn btn-primary" disabled>
+        Download Full Pack
+      </button>
+    </footer>
   </div>
-  <style>
-    /* Make each card pop on hover/focus */
+</div>
+
+
+
+  <!-- MAIN SECTIONS -->
+  <main>
+    <!-- 
+       - #HERO
+     -->
+
+     <section class="hero">
+       <div class="container">
+
+         <div class="hero-content">
+
+           <p class="hero-subtitle"></p>
+
+           <h1 class="h1 hero-title">
+             Ordinary loops? Not here. <strong>Discover the guitar loop that redefines </strong> your vibe.
+           </h1>
+
+           <div class="meta-wrapper">
+
+             <div class="badge-wrapper">
+               <div class="badge badge-fill">Exclusives</div>
+
+               <div class="badge badge-outline">Only</div>
+             </div>
+             <br>
+             <br>
+             <br>
+
+             <div class="ganre-wrapper">
+               <a href="#">Afro |</a>
+
+               <a href="#">| Drill</a>
+             </div>
+
+             <div class="date-time">
+
+               <div>
+                 <ion-icon name="calendar-outline"></ion-icon>
+
+                 <time datetime="2022">Updated </time>
+               </div>
+
+               <div>
+                 <ion-icon name="time-outline"></ion-icon>
+
+                 <time datetime="PT128M">06/05/2025</time>
+               </div>
+
+             </div>
+
+           </div>
+
+           <button class="btn btn-primary">
+             <ion-icon name="play"></ion-icon>
+
+             <span>All Packs</span>
+           </button>
+
+         </div>
+
+       </div>
+     </section>
+      <!-- Product Modal -->
+ <!-- Product Preview Modal (keep only this one!) -->
+<div id="product-modal" class="modal hidden">
+ <div class="modal-content">
+   <!-- Close button -->
+   <button id="close-product-modal" class="modal-close">&times;</button>
+
+   <!-- Product image -->
+   <img    id="modal-product-image" src="" alt="">
+
+   <!-- Title & badge -->
+   <h3     id="modal-product-title"></h3>
+   <span   id="modal-product-badge" class="badge badge-fill"></span>
+
+   <!-- Price -->
+   <p>Price :$ <span id="modal-product-price"></span></p>
+
+   <!-- Audio demos list -->
+   <div id="modal-audio-list"></div>
+
+   <!-- Add to cart button -->
+   <button id="modal-add-to-cart" class="btn btn-primary">
+     Add to Cart
+   </button>
+ </div>
+ <style>
+   /* Make each card pop on hover/focus */
 .movie-card {
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+ border-radius: 8px;
+ overflow: hidden;
+ cursor: pointer;
+ transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .movie-card:hover,
 .movie-card:focus-within {
-  transform: translateY(-6px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+ transform: translateY(-6px);
+ box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
 /* Slightly scale the banner image for a dynamic feel */
 .movie-card .card-banner img {
-  transition: transform 0.4s ease;
+ transition: transform 0.4s ease;
 }
 
 .movie-card:hover .card-banner img {
-  transform: scale(1.05);
+ transform: scale(1.05);
 }
 /* Centered, card-style modal with fade-in */
 .modal-content {
-  background: #111;                   /* deep charcoal background */
-  padding: 2rem;                      /* generous padding */
-  border-radius: 12px;                /* rounded corners */
-  max-width: 480px;                   /* constrain width */
-  width: 90%;
-  max-height: 90vh;                   /* avoid overflow */
-  overflow-y: auto;                   /* scroll if needed */
-  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-  animation: fadeInModal 0.25s ease-out forwards;
+ background: #111;                 
+ padding: 2rem;                      
+ border-radius: 12px;               
+ max-width: 480px;                   
+ width: 90%;
+ max-height: 90vh;                  
+ overflow-y: auto;                  
+ box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+ animation: fadeInModal 0.25s ease-out forwards;
 }
 
 @keyframes fadeInModal {
-  from { opacity: 0; transform: scale(0.9); }
-  to   { opacity: 1; transform: scale(1); }
+ from { opacity: 0; transform: scale(0.9); }
+ to   { opacity: 1; transform: scale(1); }
 }
 
 /* Backdrop blur for extra polish */
 .modal {
-  backdrop-filter: blur(4px);
+ backdrop-filter: blur(4px);
 }
 
 /* Larger, clearer close button */
 .modal-close {
-  font-size: 1.75rem;
-  color: #f5f5f5;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+ font-size: 1.75rem;
+ color: #f5f5f5;
+ opacity: 0.8;
+ transition: opacity 0.2s;
 }
 .modal-close:hover {
-  opacity: 1;
+ opacity: 1;
 }
 
 /* Title & badge tweaks */
 #modal-product-title {
-  margin: 1rem 0 0.25rem;
-  font-size: 1.6rem;
-  color: #fff;
-  line-height: 1.2;
+ margin: 1rem 0 0.25rem;
+ font-size: 1.6rem;
+ color: #fff;
+ line-height: 1.2;
 }
 
 #modal-product-badge {
-  display: inline-block;
-  margin-bottom: 1rem;
-  padding: 0.2rem 0.6rem;
-  font-size: 0.9rem;
-  background: #f5d000;
-  color: #111;
-  border-radius: 4px;
+ display: inline-block;
+ margin-bottom: 1rem;
+ padding: 0.2rem 0.6rem;
+ font-size: 0.9rem;
+ background: #f5d000;
+ color: #111;
+ border-radius: 4px;
 }
 
 /* Audio list spacing */
 #modal-audio-list .modal-audio-wrapper {
-  margin-bottom: 1.2rem;
+ margin-bottom: 1.2rem;
 }
 #modal-audio-list p {
-  margin: 0 0 0.3rem;
-  font-weight: 500;
-  color: #ddd;
+ margin: 0 0 0.3rem;
+ font-weight: 500;
+ color: #ddd;
 }
 #modal-audio-list audio {
-  width: 100%;
-  outline: none;
+ width: 100%;
+ outline: none;
 }
 /* More distinctive “Add to Cart” button */
 #modal-add-to-cart {
-  margin-top: 1.5rem;
-  width: 100%;
-  padding: 0.75rem;
-  font-size: 1rem;
-  border-radius: 6px;
-  transition: background 0.2s, transform 0.2s;
+ margin-top: 1.5rem;
+ width: 100%;
+ padding: 0.75rem;
+ font-size: 1rem;
+ border-radius: 6px;
+ transition: background 0.2s, transform 0.2s;
 }
 
 #modal-add-to-cart:hover {
-  background: #f5d000;
-  color: #111;
-  transform: translateY(-2px);
+ background: #f5d000;
+ color: #111;
+ transform: translateY(-2px);
 }
 
 /* Improve body text readability */
 .modal-content p,
 .modal-content span,
 #modal-audio-list p {
-  color: #eee;
-  font-size: 0.95rem;
+ color: #eee;
+ font-size: 0.95rem;
 }
 @media (max-width: 600px) {
-  .modal-content {
-    padding: 1.5rem;
-  }
-  #modal-product-title {
-    font-size: 1.4rem;
-  }
-  #modal-add-to-cart {
-    font-size: 0.95rem;
-  }
+ .modal-content {
+   padding: 1.5rem;
+ }
+ #modal-product-title {
+   font-size: 1.4rem;
+ }
+ #modal-add-to-cart {
+   font-size: 0.95rem;
+ }
 }
 
 
-  </style>
+ </style>
 </div>
 
 
-  <!-- Cart Modal -->
-  <div id="cart-modal" class="modal hidden">
-    <div class="modal-content">
-      <span id="close-cart-modal" class="modal-close">&times;</span>
-      <h3>Your Cart</h3>
-      <div id="cart-items"></div>
-    </div>
-  </div>
+ <!-- Cart Modal -->
+ <!-- <div id="cart-modal" class="modal hidden">
+   <div class="modal-content">
+     <span id="close-cart-modal" class="modal-close">&times;</span>
+     <h3>Your Cart</h3>
+     <div id="cart-items"></div>
+   </div>
+ </div> -->
 
-    <!-- Upcoming Section -->
-    <section id="upcoming" class="upcoming">
-      <div class="container">
-        <p class="section-subtitle">The go-to industry pack</p>
-        <h2 class="h2 section-title">SUPER BIG BLACK®</h2>
-        <ul class="movies-list">
-          <!-- Product cards will be injected here -->
-        </ul>
-      </div>
-    </section>
+   <!-- Upcoming Section -->
+   <section id="upcoming" class="upcoming">
+     <div class="container">
+       <p class="section-subtitle">The go-to industry pack</p>
+       <h2 class="h2 section-title">SUPER BIG BLACK®</h2>
+       <ul class="movies-list">
+         <!-- Product cards will be injected here -->
+       </ul>
+     </div>
+   </section>
 
-    <!-- Top Rated Section -->
-    <section id="top-rated" class="top-rated">
-      <div class="container">
-        <p class="section-subtitle">Top Rated</p>
-        <h2 class="h2 section-title">Beats</h2>
-        <ul class="movies-list">
-          <!-- Product cards will be injected here -->
-        </ul>
-      </div>
-    </section>
+   <!-- Top Rated Section -->
+   <section id="top-rated" class="top-rated">
+     <div class="container">
+       <p class="section-subtitle">Top Rated</p>
+       <h2 class="h2 section-title">Beats</h2>
+       <ul class="movies-list">
+         <!-- Product cards will be injected here -->
+       </ul>
+     </div>
+   </section>
 
-    <!-- TV Series Section -->
-    <section id="tv-series" class="tv-series">
-      <div class="container">
-        <p class="section-subtitle">Best Beats</p>
-        <h2 class="h2 section-title">Pack</h2>
-        <ul class="movies-list">
-          <!-- Product cards will be injected here -->
-        </ul>
-      </div>
-    </section>
-  </main>
+   <!-- TV Series Section -->
+   <section id="tv-series" class="tv-series">
+     <div class="container">
+       <p class="section-subtitle">Best Beats</p>
+       <h2 class="h2 section-title">Pack</h2>
+       <ul class="movies-list">
+         <!-- Product cards will be injected here -->
+       </ul>
+     </div>
+   </section>
 
- <!-- 
-    - #FOOTER
-  -->
 
+ </main>
+
+  <!-- FOOTER -->
   <footer class="footer">
 
     <div class="footer-top">
@@ -518,205 +547,52 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        background-color: #000000; /* Optional: Set a background color */
-        color: white; /* Optional: Set the text color */
-        text-align: center; /* Optional: Center the text */
-        padding: 3px; /* Optional: Add some padding */
-        z-index: 1000; /* Optional: Ensure the footer is above other content */
-        margin: 1rem;
-            
+        background-color:hsl(0, 0%, 0%);
+        color: white; 
+        text-align: center;
+        padding: 3px; 
+        z-index: 1000; 
+        margin: 0;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        display: flex;
+                   
       }
 
       .footer-bottom a {
-        color: white; /* Optional: Change link color */
-        text-decoration: none; /* Optional: Remove underline */
+        color: white;
+        text-decoration: none;
       }
 
       .footer-bottom a:hover {
-        text-decoration: underline; /* Optional: Add underline on hover */
+        text-decoration: underline;
+      }
+      .footer-bottom .copyright {
+        margin: 0;
       }
 
       </style>
 
-<!--         <img src="./assets/images/footer-bottom-img.png" alt="Online banking companies logo" class="footer-bottom-img">
- -->
+        <!-- <img src="./assets/images/footer-bottom-img.png" alt="Online banking companies logo" class="footer-bottom-img"> -->
+
       </div>
     </div>
 
   </footer>
 
-   <!-- 
-    - #GO TO TOP
-  -->
+  <!-- GO TO TOP -->
+  <a href="#top" class="go-top" data-go-top><ion-icon name="chevron-up"></ion-icon></a>
 
-  <a href="#top" class="go-top" data-go-top>
-    <ion-icon name="chevron-up"></ion-icon>
-  </a>
-
- <!-- 
-    - custom js link
-  -->
-    
-  <script src="./assets/js/script.js"></script>
-
-  <!-- 
-    - ionicon link
-  -->
+  <!-- Scripts -->
+  <script src="./assets/js/script.js" defer></script>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <!-- Frontend Logic -->
+<script src="./assets/js/main.js"></script>
 
-  <!-- Script to render products from localStorage -->
-
-
-
-<!-- PRODUCT PREVIEW MODAL -->
-<!-- <div id="product-modal" class="modal hidden">
-  <div class="modal-content">
-    <button id="close-product-modal" class="modal-close">&times;</button>
-    <img id="modal-product-image" src="" alt="">
-    <h3 id="modal-product-title"></h3>
-    <span class="badge badge-fill" id="modal-product-badge"></span>
-    <p>Price: $<span id="modal-product-price"></span></p>
-    <div id="modal-beat-list"></div>
-    <button id="modal-checkout" class="btn btn-primary">Checkout Full Pack</button>
-  </div>
-</div> -->
-
-
-<!-- CART CONTENTS MODAL -->
-<div id="cart-modal" class="modal hidden">
-  <div class="modal-content">
-    <button id="close-cart-modal" class="modal-close">&times;</button>
-    <h2>Your Cart</h2>
-    <div id="cart-items" style="margin-top:20px;"></div>
-  </div>
-</div>
-
-
-<script>
-  'use strict';
-
-  // Utility: Get stored products
-  function getProducts() {
-    return JSON.parse(localStorage.getItem('products')) || [];
-  }
-
-  // Render products into the appropriate sections
-  function renderProducts() {
-    const products = getProducts();
-
-    // Clear existing cards
-    ['upcoming', 'top-rated', 'tv-series'].forEach(section => {
-      const container = document.querySelector(`#${section} .movies-list`);
-      if (container) container.innerHTML = '';
-    });
-
-    // Create a card for each product
-    products.forEach(product => {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <div class="movie-card">
-          <figure class="card-banner">
-            <img src="${product.image}" alt="${product.title} image">
-          </figure>
-          <div class="title-wrapper">
-            <h3 class="card-title">${product.title}</h3>
-          </div>
-          <div class="card-meta">
-            <div class="badge badge-outline">${product.badge}</div>
-            <div class="duration">
-              <ion-icon name="pricetag-outline"></ion-icon>
-              <span>$${product.price.toFixed(2)}</span>
-            </div>
-          </div>
-        </div>
-      `;
-      // Attach click handler to open modal
-      li.querySelector('.movie-card')
-        .addEventListener('click', () => openProductModal(product));
-
-      // Append to the correct section
-      const sectionContainer = document.querySelector(`#${product.section} .movies-list`);
-      if (sectionContainer) sectionContainer.appendChild(li);
-    });
-  }
-
-  // Fill and show the product modal
-  function openProductModal(product) {
-    // Elements
-    const modal         = document.getElementById('product-modal');
-    const imgEl         = document.getElementById('modal-product-image');
-    const titleEl       = document.getElementById('modal-product-title');
-    const badgeEl       = document.getElementById('modal-product-badge');
-    const priceEl       = document.getElementById('modal-product-price');
-    const audioListEl   = document.getElementById('modal-audio-list');
-    const addToCartBtn  = document.getElementById('modal-add-to-cart');
-
-    // Populate fields
-    imgEl.src            = product.image;
-    titleEl.textContent  = product.title;
-    badgeEl.textContent  = product.badge;
-    priceEl.textContent  = product.price.toFixed(2);
-
-    // Build audio demo list
-    audioListEl.innerHTML = '';
-    product.beats.forEach(beat => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'modal-audio-wrapper';
-      wrapper.innerHTML = `
-        <p>${beat.name}</p>
-        <audio controls src="${beat.demo}"></audio>
-      `;
-      audioListEl.appendChild(wrapper);
-    });
-
-    // Pass title onto the Add-to-Cart button
-    addToCartBtn.dataset.productTitle = product.title;
-
-    // Show modal
-    modal.classList.remove('hidden');
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    renderProducts();
-
-    // Close product modal
-    document.getElementById('close-product-modal')
-      .addEventListener('click', () => {
-        document.getElementById('product-modal')
-                .classList.add('hidden');
-      });
-
-  // Open cart modal
-  document.getElementById('cart-modal-btn')
-    .addEventListener('click', () => {
-      populateCartModal();
-      document.getElementById('cart-modal').classList.remove('hidden');
-    });
-
-  // Close cart modal
-  document.getElementById('close-cart-modal')
-    .addEventListener('click', () => {
-      document.getElementById('cart-modal').classList.add('hidden');
-    });
-
-  // Add-to-cart button in product modal
-  document.getElementById('modal-add-to-cart')
-    .addEventListener('click', function() {
-      const title = this.dataset.productTitle;
-      const qty   = Number(document.getElementById('modal-quantity').value);
-      const cart  = getCart();
-      cart.push({ title, quantity: qty });
-      saveCart(cart);
-      alert(`${title} added to cart!`);
-      document.getElementById('product-modal').classList.add('hidden');
-    });
-});
-
-// Listen for products changes across tabs
-window.addEventListener('storage', e => {
-  if (e.key === 'products') renderProducts();
-});
-  </script>
 </body>
 </html>
