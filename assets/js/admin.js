@@ -6,7 +6,7 @@ const bc = new BroadcastChannel('beatstore_channel');
 
 function openDB() {
   return new Promise((res, rej) => {
-    const rq = indexedDB.open('BeatStoreDB', 1);
+    const rq = indexedDB.open('BeatStoreDB', 2);
 rq.onupgradeneeded = e => {
   const db = e.target.result;
   // Make absolutely sure autoIncrement:true is included:
