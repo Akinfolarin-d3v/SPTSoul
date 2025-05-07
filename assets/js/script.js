@@ -1,78 +1,98 @@
 'use strict';
 
-/**
- * navbar variables
- */
+// ─── NAVBAR / STICKY HEADER / GO-TOP ────────────────────────────────────────────
+[...document.querySelectorAll('[data-menu-open-btn], [data-menu-close-btn], [data-overlay]')]
+  .forEach(el => el.addEventListener('click', () => {
+    document.querySelector('[data-navbar]').classList.toggle('active');
+    document.querySelector('[data-overlay]').classList.toggle('active');
+    document.body.classList.toggle('active');
+  }));
 
-const navOpenBtn = document.querySelector("[data-menu-open-btn]");
-const navCloseBtn = document.querySelector("[data-menu-close-btn]");
-const navbar = document.querySelector("[data-navbar]");
-const overlay = document.querySelector("[data-overlay]");
+window.addEventListener('scroll', () => {
+  document.querySelector('[data-header]').classList.toggle('active', window.scrollY >= 10);
+});
 
-const navElemArr = [navOpenBtn, navCloseBtn, overlay];
+window.addEventListener('scroll', () => {
+  document.querySelector('[data-go-top]').classList.toggle('active', window.scrollY >= 500);
+});
 
-for (let i = 0; i < navElemArr.length; i++) {
+// ─── BROADCAST CHANNEL ─────────────────────────────────────────────────────────
+const bc = new BroadcastChannel('beatstore_channel');
+bc.onmessage = evt => {
+  if (evt.data === 'products-updated') renderProducts();
+};
 
-  navElemArr[i].addEventListener("click", function () {
-
-    navbar.classList.toggle("active");
-    overlay.classList.toggle("active");
-    document.body.classList.toggle("active");
-
+// ─── IndexedDB Helpers ────────────────────────────────────────────────────────
+function openDB() {
+  return new Promise((res, rej) => {
+    const rq = indexedDB.open('BeatStoreDB', 1);
+    rq.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('products'))
+        db.createObjectStore('products', { keyPath: 'id', autoIncrement: true });
+      if (!db.objectStoreNames.contains('cart'))
+        db.createObjectStore('cart', { keyPath: 'id', autoIncrement: true });
+    };
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror   = () => rej(rq.error);
   });
-
 }
 
-
-
-/**
- * header sticky
- */
-
-const header = document.querySelector("[data-header]");
-
-window.addEventListener("scroll", function () {
-
-  window.scrollY >= 10 ? header.classList.add("active") : header.classList.remove("active");
-
-});
-
-
-
-/**
- * go top
- */
-
-const goTopBtn = document.querySelector("[data-go-top]");
-
-window.addEventListener("scroll", function () {
-
-  window.scrollY >= 500 ? goTopBtn.classList.add("active") : goTopBtn.classList.remove("active");
-
-});
-
-/* UTILS */
-function getProducts() {
-  return JSON.parse(localStorage.getItem('products')) || [];
-}
-function getCart() {
-  return JSON.parse(localStorage.getItem('cart')) || [];
-}
-function saveCart(cart) {
-  localStorage.setItem('cart', JSON.stringify(cart));
+async function getProducts() {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('products', 'readonly');
+    const os = tx.objectStore('products');
+    const rq = os.getAll();
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror   = () => rej(rq.error);
+  });
 }
 
-/* RENDER CARDS */
-function renderProducts() {
-  const products = getProducts();
+async function getCart() {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('cart', 'readonly');
+    const os = tx.objectStore('cart');
+    const rq = os.getAll();
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror   = () => rej(rq.error);
+  });
+}
+
+async function saveCartItem(item) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('cart', 'readwrite');
+    const os = tx.objectStore('cart');
+    const rq = os.add(item);
+    rq.onsuccess = () => res();
+    rq.onerror   = () => rej(rq.error);
+  });
+}
+
+async function deleteCartItem(id) {
+  const db = await openDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction('cart', 'readwrite');
+    const os = tx.objectStore('cart');
+    const rq = os.delete(id);
+    rq.onsuccess = () => res();
+    rq.onerror   = () => rej(rq.error);
+  });
+}
+
+// ─── RENDER PRODUCTS ────────────────────────────────────────────────────────────
+async function renderProducts() {
+  const prods = await getProducts();
   ['upcoming','top-rated','tv-series'].forEach(sec => {
     const ul = document.querySelector(`#${sec} .movies-list`);
     if (ul) ul.innerHTML = '';
   });
-  products.forEach((p, i) => {
+  prods.forEach(p => {
     const li = document.createElement('li');
     li.innerHTML = `
-      <div class="movie-card" data-index="${i}">
+      <div class="movie-card" data-id="${p.id}">
         <figure class="card-banner">
           <img src="${p.image}" alt="${p.title}">
         </figure>
@@ -83,111 +103,125 @@ function renderProducts() {
           <div class="badge badge-outline">${p.badge}</div>
           <div class="duration">
             <ion-icon name="pricetag-outline"></ion-icon>
-            <span>$${p.price}</span>
+            $${p.price.toFixed(2)}
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
     document.querySelector(`#${p.section} .movies-list`).append(li);
   });
-
-  // attach click handlers
   document.querySelectorAll('.movie-card').forEach(card => {
-    card.addEventListener('click', () => {
-      openProductModal(getProducts()[card.dataset.index]);
+    card.addEventListener('click', async () => {
+      const id   = Number(card.dataset.id);
+      const all  = await getProducts();
+      const p    = all.find(x => x.id === id);
+      openProductModal(p);
     });
   });
 }
 
-/* PRODUCT MODAL */
-function openProductModal(product) {
-  document.getElementById('modal-product-image').src = product.image;
-  document.getElementById('modal-product-title').textContent = product.title;
-  document.getElementById('modal-product-badge').textContent = product.badge;
-  document.getElementById('modal-product-price').textContent = product.price.toFixed(2);
+// ─── PRODUCT MODAL ─────────────────────────────────────────────────────────────
+function openProductModal(p) {
+  document.getElementById('modal-product-image').src         = p.image;
+  document.getElementById('modal-product-title').textContent = p.title;
+  document.getElementById('modal-product-badge').textContent = p.badge;
+  document.getElementById('modal-product-price').textContent = p.price.toFixed(2);
 
-  const beatList = document.getElementById('modal-beat-list');
-  beatList.innerHTML = '';
-  product.beats.forEach((b, idx) => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'modal-audio-wrapper';
-    wrapper.innerHTML = `
-      <p>${b.name}</p>
-      <audio controls src="${b.demo}"></audio>
-      <button class="btn btn-primary add-beat-btn" data-idx="${idx}">
-        Add to Cart
-      </button>
-    `;
-    beatList.appendChild(wrapper);
+  const list = document.getElementById('modal-audio-list');
+  list.innerHTML = '';
+  p.demos.forEach(d => {
+    const w = document.createElement('div');
+    w.className = 'modal-audio-wrapper';
+    w.innerHTML = `<p>${d.name}</p><audio controls src="${d.url}"></audio>`;
+    list.append(w);
   });
 
-  // full-pack checkout
-  document.getElementById('modal-checkout').onclick = () => {
-    const cart = getCart();
-    cart.push({ title: product.title, type: 'pack', price: product.price });
-    saveCart(cart);
-    alert('Pack added to cart!');
-  };
-
-  // per-beat add
-  beatList.querySelectorAll('.add-beat-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = btn.dataset.idx;
-      const cart = getCart();
-      // price uses product.price per beat
-      cart.push({ title: product.title, beat: product.beats[idx].name, type: 'beat', price: product.price });
-      saveCart(cart);
-      alert(`${product.beats[idx].name} added to cart!`);
+  document.getElementById('modal-add-to-cart').onclick = async () => {
+    await saveCartItem({
+      title:  p.title,
+      price:  p.price,
+      demos:  p.demos.map(d => d.url),
+      zip:    p.zip
     });
-  });
+    alert(`${p.title} added to cart!`);
+    document.getElementById('product-modal').classList.add('hidden');
+  };
 
   document.getElementById('product-modal').classList.remove('hidden');
 }
 
+document.getElementById('close-product-modal').onclick = () =>
+  document.getElementById('product-modal').classList.add('hidden');
 
-/* CLOSE BUTTONS */
-document.getElementById('close-product-modal')
-  .addEventListener('click', () => document.getElementById('product-modal').classList.add('hidden'));
-document.getElementById('close-cart-modal')
-  .addEventListener('click', () => document.getElementById('cart-modal').classList.add('hidden'));
+// ─── CART MODAL ───────────────────────────────────────────────────────────────
+document.getElementById('cart-modal-btn').onclick = async () => {
+  const cart    = await getCart();
+  const ct      = document.getElementById('cart-items');
+  const cc      = document.getElementById('cart-count');
+  const totalEl = document.getElementById('cart-total');
+  const dlBtn   = document.getElementById('download-btn');
 
-/* CART BUTTON */
-document.getElementById('cart-modal-btn')
-  .addEventListener('click', () => {
-    document.getElementById('cart-modal').classList.remove('hidden');
-    populateCartModal();
-  });
+  if (!cart.length) {
+    ct.innerHTML    = '<p>Your cart is empty.</p>';
+    cc.textContent  = '0 items';
+    totalEl.textContent = '0.00';
+    dlBtn.disabled  = true;
+  } else {
+    ct.innerHTML = cart.map(it => `
+      <div class="cart-item" data-id="${it.id}">
+        <h4>${it.title}<button class="remove-item-btn">&times;</button></h4>
+        <div class="demo-list">
+          ${it.demos.map(u => `<audio controls src="${u}"></audio>`).join('')}
+        </div>
+      </div>
+    `).join('');
+    cc.textContent      = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
+    totalEl.textContent = cart.reduce((sum, it) => sum + it.price, 0).toFixed(2);
+    dlBtn.disabled      = true;
 
-/* ADD TO CART */
-document.getElementById('modal-add-to-cart')
-  .addEventListener('click', function() {
-    const title = this.dataset.productTitle;
-    const qty = parseInt(document.getElementById('modal-quantity').value);
-    const cart = getCart();
-    cart.push({ title, quantity: qty });
-    saveCart(cart);
-    alert(`${title} added to cart!`);
-    document.getElementById('product-modal').classList.add('hidden');
-  });
-
-/* POPULATE CART CONTENTS */
-function populateCartModal() {
-  const items = getCart();
-  const container = document.getElementById('cart-items');
-  container.innerHTML = '';
-  if (!items.length) {
-    container.textContent = 'Your cart is empty.';
-    return;
+    ct.querySelectorAll('.remove-item-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = Number(btn.closest('.cart-item').dataset.id);
+        await deleteCartItem(id);
+        document.getElementById('cart-modal-btn').click();
+      });
+    });
   }
-  items.forEach(i => {
-    const div = document.createElement('div');
-    div.textContent = `${i.title} × ${i.quantity}`;
-    container.append(div);
-  });
-}
 
-/* INITIALIZE */
-document.addEventListener('DOMContentLoaded', renderProducts);
-window.addEventListener('storage', e => {
-  if (e.key === 'products') renderProducts();
+  document.getElementById('cart-modal').classList.remove('hidden');
+};
+
+document.getElementById('close-cart-modal').onclick = () =>
+  document.getElementById('cart-modal').classList.add('hidden');
+
+// ─── PAYSTACK CHECKOUT & DOWNLOAD (unchanged) ─────────────────────────────────
+document.getElementById('checkout-btn').addEventListener('click', async () => {
+  const cart   = await getCart();
+  const amount = cart.reduce((s, i) => s + i.price, 0) * 100; // kobo
+  const handler = PaystackPop.setup({
+    key:      'YOUR_PUBLIC_KEY',
+    email:    'customer@example.com',
+    amount,
+    currency: 'NGN',
+    onClose() { alert('Payment window closed'); },
+    callback(r) {
+      document.getElementById('download-btn').disabled = false;
+      alert('Payment successful! Ref: ' + r.reference);
+    }
+  });
+  handler.openIframe();
 });
+
+document.getElementById('download-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('download-btn');
+  if (btn.disabled) return;
+  const cart = await getCart();
+  cart.forEach(it => {
+    const a = document.createElement('a');
+    a.href = it.zip;
+    a.download = `${it.title}.zip`;
+    a.click();
+  });
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', renderProducts);
