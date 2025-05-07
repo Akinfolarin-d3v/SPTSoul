@@ -60,9 +60,8 @@ async function deleteCartItem(id) {
   });
 }
 
-// ─── PRODUCT MODAL LOGIC ────────────────────────────────────────────────────────
+// ─── PRODUCT MODAL (reuse same logic) ─────────────────────────────────────────
 function openProductModal(p) {
-  // Populate modal fields
   document.getElementById('modal-product-image').src         = p.image;
   document.getElementById('modal-product-title').textContent = p.title;
   document.getElementById('modal-product-badge').textContent = p.badge;
@@ -71,25 +70,23 @@ function openProductModal(p) {
   const list = document.getElementById('modal-audio-list');
   list.innerHTML = '';
   p.demos.forEach(d => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'modal-audio-wrapper';
-    wrapper.innerHTML = `<p>${d.name}</p><audio controls src="${d.url}"></audio>`;
-    list.append(wrapper);
+    const w = document.createElement('div');
+    w.className = 'modal-audio-wrapper';
+    w.innerHTML = `<p>${d.name}</p><audio controls src="${d.url}"></audio>`;
+    list.append(w);
   });
 
-  // Add to cart handler
   document.getElementById('modal-add-to-cart').onclick = async () => {
     await saveCartItem({
-      title:  p.title,
-      price:  p.price,
-      demos:  p.demos.map(d => d.url),
-      zip:    p.zip
+      title: p.title,
+      price: p.price,
+      demos: p.demos.map(d => d.url),
+      zip:   p.zip
     });
     alert(`${p.title} added to cart!`);
     document.getElementById('product-modal').classList.add('hidden');
   };
 
-  // Show modal
   document.getElementById('product-modal').classList.remove('hidden');
 }
 
@@ -98,7 +95,7 @@ document.getElementById('close-product-modal').onclick = () => {
   document.getElementById('product-modal').classList.add('hidden');
 };
 
-// ─── CART MODAL LOGIC ───────────────────────────────────────────────────────────
+// ─── CART MODAL (reuse same logic) ─────────────────────────────────────────────
 document.getElementById('cart-modal-btn').onclick = async () => {
   const cart    = await getCart();
   const ct      = document.getElementById('cart-items');
@@ -107,23 +104,20 @@ document.getElementById('cart-modal-btn').onclick = async () => {
   const dlBtn   = document.getElementById('download-btn');
 
   if (!cart.length) {
-    ct.innerHTML       = '<p>Your cart is empty.</p>';
-    cc.textContent     = '0 items';
-    totalEl.textContent= '0.00';
-    dlBtn.disabled     = true;
+    ct.innerHTML        = '<p>Your cart is empty.</p>';
+    cc.textContent      = '0 items';
+    totalEl.textContent = '0.00';
+    dlBtn.disabled      = true;
   } else {
     ct.innerHTML = cart.map(it => `
       <div class="cart-item" data-id="${it.id}">
-        <h4>
-          ${it.title}
-          <button class="remove-item-btn">&times;</button>
-        </h4>
+        <h4>${it.title}<button class="remove-item-btn">&times;</button></h4>
         <div class="demo-list">
           ${it.demos.map(u => `<audio controls src="${u}"></audio>`).join('')}
         </div>
       </div>
     `).join('');
-    cc.textContent       = `${cart.length} item${cart.length>1?'s':''}`;
+    cc.textContent       = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
     totalEl.textContent  = cart.reduce((sum, it) => sum + it.price, 0).toFixed(2);
     dlBtn.disabled       = true;
 
@@ -131,7 +125,7 @@ document.getElementById('cart-modal-btn').onclick = async () => {
       btn.addEventListener('click', async () => {
         const id = Number(btn.closest('.cart-item').dataset.id);
         await deleteCartItem(id);
-        document.getElementById('cart-modal-btn').click();  // refresh
+        document.getElementById('cart-modal-btn').click();
       });
     });
   }
@@ -140,19 +134,16 @@ document.getElementById('cart-modal-btn').onclick = async () => {
 };
 
 // Close cart modal
-document.getElementById('close-cart-modal').onclick = () => {
+document.getElementById('close-cart-modal').onclick = () =>
   document.getElementById('cart-modal').classList.add('hidden');
-};
 
 // ─── RENDER ALL PACKS ──────────────────────────────────────────────────────────
 async function renderAllPacks() {
   const prods = await getAllProducts();
-  // Sort alphabetically by title
   prods.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
 
   const listEl = document.getElementById('all-packs-list');
-  listEl.innerHTML = '';  // clear before render
-
+  listEl.innerHTML = '';
   prods.forEach(p => {
     const li = document.createElement('li');
     li.innerHTML = `
@@ -173,7 +164,6 @@ async function renderAllPacks() {
     listEl.append(li);
   });
 
-  // Attach click listeners for each card
   document.querySelectorAll('#all-packs-list .movie-card').forEach(card => {
     card.addEventListener('click', () => {
       const id = Number(card.dataset.id);
@@ -183,5 +173,11 @@ async function renderAllPacks() {
   });
 }
 
-// Initialize on page load
-window.addEventListener('DOMContentLoaded', renderAllPacks);
+window.addEventListener('DOMContentLoaded', () => {
+  // Detect which page we're on
+  if (document.getElementById('all-packs-list')) {
+    renderAllPacks();
+  } else {
+    renderProducts();
+  }
+});

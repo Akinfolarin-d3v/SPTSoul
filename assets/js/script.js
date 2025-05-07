@@ -1,37 +1,15 @@
 'use strict';
 
-// ─── NAVBAR / STICKY HEADER / GO-TOP ────────────────────────────────────────────
-[...document.querySelectorAll('[data-menu-open-btn], [data-menu-close-btn], [data-overlay]')]
-  .forEach(el => el.addEventListener('click', () => {
-    document.querySelector('[data-navbar]').classList.toggle('active');
-    document.querySelector('[data-overlay]').classList.toggle('active');
-    document.body.classList.toggle('active');
-  }));
-
-window.addEventListener('scroll', () => {
-  document.querySelector('[data-header]').classList.toggle('active', window.scrollY >= 10);
-});
-
-window.addEventListener('scroll', () => {
-  document.querySelector('[data-go-top]').classList.toggle('active', window.scrollY >= 500);
-});
-
-// ─── BROADCAST CHANNEL ─────────────────────────────────────────────────────────
-const bc = new BroadcastChannel('beatstore_channel');
-bc.onmessage = evt => {
-  if (evt.data === 'products-updated') renderProducts();
-};
-
-// ─── IndexedDB Helpers ────────────────────────────────────────────────────────
+// ─── INDEXEDDB HELPERS ─────────────────────────────────────────────────────────
 function openDB() {
   return new Promise((res, rej) => {
-    const rq = indexedDB.open('BeatStoreDB', 1);
+    const rq = indexedDB.open('BeatStoreDB', 2);
     rq.onupgradeneeded = e => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains('products'))
         db.createObjectStore('products', { keyPath: 'id', autoIncrement: true });
       if (!db.objectStoreNames.contains('cart'))
-        db.createObjectStore('cart', { keyPath: 'id', autoIncrement: true });
+        db.createObjectStore('cart',    { keyPath: 'id', autoIncrement: true });
     };
     rq.onsuccess = () => res(rq.result);
     rq.onerror   = () => rej(rq.error);
@@ -82,13 +60,17 @@ async function deleteCartItem(id) {
   });
 }
 
-// ─── RENDER PRODUCTS ────────────────────────────────────────────────────────────
+// ─── RENDER HOME PAGE PRODUCTS ─────────────────────────────────────────────────
 async function renderProducts() {
   const prods = await getProducts();
-  ['upcoming','top-rated','tv-series'].forEach(sec => {
+
+  // Clear each section
+  ['upcoming', 'top-rated', 'tv-series'].forEach(sec => {
     const ul = document.querySelector(`#${sec} .movies-list`);
     if (ul) ul.innerHTML = '';
   });
+
+  // Render into appropriate section
   prods.forEach(p => {
     const li = document.createElement('li');
     li.innerHTML = `
@@ -107,8 +89,11 @@ async function renderProducts() {
           </div>
         </div>
       </div>`;
-    document.querySelector(`#${p.section} .movies-list`).append(li);
+    const target = document.querySelector(`#${p.section} .movies-list`);
+    if (target) target.append(li);
   });
+
+  // Attach click handlers for product modal
   document.querySelectorAll('.movie-card').forEach(card => {
     card.addEventListener('click', async () => {
       const id   = Number(card.dataset.id);
@@ -119,13 +104,15 @@ async function renderProducts() {
   });
 }
 
-// ─── PRODUCT MODAL ─────────────────────────────────────────────────────────────
+// ─── PRODUCT MODAL LOGIC ────────────────────────────────────────────────────────
 function openProductModal(p) {
+  // Populate fields
   document.getElementById('modal-product-image').src         = p.image;
   document.getElementById('modal-product-title').textContent = p.title;
   document.getElementById('modal-product-badge').textContent = p.badge;
   document.getElementById('modal-product-price').textContent = p.price.toFixed(2);
 
+  // Audio demos
   const list = document.getElementById('modal-audio-list');
   list.innerHTML = '';
   p.demos.forEach(d => {
@@ -135,24 +122,28 @@ function openProductModal(p) {
     list.append(w);
   });
 
+  // Add to cart
   document.getElementById('modal-add-to-cart').onclick = async () => {
     await saveCartItem({
-      title:  p.title,
-      price:  p.price,
-      demos:  p.demos.map(d => d.url),
-      zip:    p.zip
+      title: p.title,
+      price: p.price,
+      demos: p.demos.map(d => d.url),
+      zip:   p.zip
     });
     alert(`${p.title} added to cart!`);
     document.getElementById('product-modal').classList.add('hidden');
   };
 
+  // Show modal
   document.getElementById('product-modal').classList.remove('hidden');
 }
 
-document.getElementById('close-product-modal').onclick = () =>
+// Close product modal
+document.getElementById('close-product-modal').onclick = () => {
   document.getElementById('product-modal').classList.add('hidden');
+};
 
-// ─── CART MODAL ───────────────────────────────────────────────────────────────
+// ─── CART MODAL LOGIC ───────────────────────────────────────────────────────────
 document.getElementById('cart-modal-btn').onclick = async () => {
   const cart    = await getCart();
   const ct      = document.getElementById('cart-items');
@@ -161,10 +152,10 @@ document.getElementById('cart-modal-btn').onclick = async () => {
   const dlBtn   = document.getElementById('download-btn');
 
   if (!cart.length) {
-    ct.innerHTML    = '<p>Your cart is empty.</p>';
-    cc.textContent  = '0 items';
+    ct.innerHTML        = '<p>Your cart is empty.</p>';
+    cc.textContent      = '0 items';
     totalEl.textContent = '0.00';
-    dlBtn.disabled  = true;
+    dlBtn.disabled      = true;
   } else {
     ct.innerHTML = cart.map(it => `
       <div class="cart-item" data-id="${it.id}">
@@ -174,15 +165,15 @@ document.getElementById('cart-modal-btn').onclick = async () => {
         </div>
       </div>
     `).join('');
-    cc.textContent      = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
-    totalEl.textContent = cart.reduce((sum, it) => sum + it.price, 0).toFixed(2);
-    dlBtn.disabled      = true;
+    cc.textContent       = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
+    totalEl.textContent  = cart.reduce((sum, it) => sum + it.price, 0).toFixed(2);
+    dlBtn.disabled       = true;
 
     ct.querySelectorAll('.remove-item-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = Number(btn.closest('.cart-item').dataset.id);
         await deleteCartItem(id);
-        document.getElementById('cart-modal-btn').click();
+        document.getElementById('cart-modal-btn').click(); // refresh
       });
     });
   }
@@ -190,10 +181,11 @@ document.getElementById('cart-modal-btn').onclick = async () => {
   document.getElementById('cart-modal').classList.remove('hidden');
 };
 
+// Close cart modal
 document.getElementById('close-cart-modal').onclick = () =>
   document.getElementById('cart-modal').classList.add('hidden');
 
-// ─── PAYSTACK CHECKOUT & DOWNLOAD (unchanged) ─────────────────────────────────
+// ─── PAYSTACK CHECKOUT & DOWNLOAD ───────────────────────────────────────────────
 document.getElementById('checkout-btn').addEventListener('click', async () => {
   const cart   = await getCart();
   const amount = cart.reduce((s, i) => s + i.price, 0) * 100; // kobo
@@ -212,12 +204,12 @@ document.getElementById('checkout-btn').addEventListener('click', async () => {
 });
 
 document.getElementById('download-btn').addEventListener('click', async () => {
-  const btn = document.getElementById('download-btn');
+  const btn  = document.getElementById('download-btn');
   if (btn.disabled) return;
   const cart = await getCart();
   cart.forEach(it => {
     const a = document.createElement('a');
-    a.href = it.zip;
+    a.href     = it.zip;
     a.download = `${it.title}.zip`;
     a.click();
   });
