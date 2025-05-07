@@ -1,4 +1,5 @@
 'use strict';
+
 /**
  * navbar variables
  */
@@ -49,7 +50,6 @@ window.addEventListener("scroll", function () {
   window.scrollY >= 500 ? goTopBtn.classList.add("active") : goTopBtn.classList.remove("active");
 
 });
-
 // ─── INDEXEDDB HELPERS ─────────────────────────────────────────────────────────
 function openDB() {
   return new Promise((res, rej) => {
