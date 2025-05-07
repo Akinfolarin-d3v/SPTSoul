@@ -499,7 +499,7 @@ body.active { overflow: hidden; }
 \*-----------------------------------*/
 
 .hero {
-  background: url("../images/noir-EZM57An3Iic-unsplash.jpg") no-repeat;
+  background: url("../images/mos-design-YNLIep6Pn4g-unsplash.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   min-height: 750px;
@@ -1751,21 +1751,49 @@ body.active { overflow: hidden; }
   gap: 10px;
 }
 
-/* MODAL BASE */
-.modal { position:fixed; inset:0; background:rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; z-index:100; }
-.modal.hidden { display:none; }
-.modal-content { background:var(--gunmetal-1); padding:30px; border-radius:8px; max-width:90%; max-height:90%; overflow:auto; position:relative; color:var(--white); }
-.modal-close { position:absolute; top:12px; right:12px; font-size:1.5rem; background:none; border:none; color:var(--citrine); cursor:pointer; }
-/* Responsive image */
-.modal-content img { max-width:100%; height:auto; margin-bottom:20px; }
-/* Audio list grid */
-#modal-audio-list { display:grid; gap:15px; }
-@media(min-width:600px){#modal-audio-list{grid-template-columns:1fr 1fr;}}
-/* Audio-price styling */
-.audio-price { color:var(--citrine); font-weight:var(--fw-700); margin-top:5px; }
 
-.modal .add-beat-btn,
-#modal-checkout {
+
+/* Cart Modal */
+.cart-modal__body .cart-item {
+  position: relative;
+  padding: 1rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.cart-item h4 {
+  margin: 0 0 0.5rem;
+  color: #eee;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-item .remove-item-btn {
+  background: none;
+  border: none;
+  color: #e74c3c;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.cart-item .demo-list audio {
   width: 100%;
-  margin: 10px 0;
+  height: 30px;
+  margin-bottom: 0.5rem;
+  background: #444;
+  border-radius: 4px;
+}
+
+/* Total & Buttons */
+.cart-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.cart-total {
+  flex: 1;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
