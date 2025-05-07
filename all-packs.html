@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Packs | SptSoul</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./assets/css/style.css" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body id="top">
+
+  <!-- IndexedDB Helpers -->
+  <script src="./assets/js/idb-helpers.js" defer></script>
+
+  <!-- HEADER (identical to index.html) -->
+  <header class="header" data-header>
+    <div class="container">
+      <div class="overlay" data-overlay></div>
+      <a href="./index.html" class="logo">
+        <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="65" alt="SptSoul logo">
+      </a>
+      <div class="header-actions">
+        <button class="search-btn" aria-label="Search">
+          <ion-icon name="search-outline"></ion-icon>
+        </button>
+        <div class="lang-wrapper">
+          <label for="language"><ion-icon name="globe-outline"></ion-icon></label>
+          <select name="language" id="language">
+            <option value="en">EN</option>
+            <option value="au">AU</option>
+            <option value="ar">AR</option>
+            <option value="tu">TU</option>
+          </select>
+        </div>
+        <button class="btn btn-primary">Sign in</button>
+      </div>
+      <button class="menu-open-btn" data-menu-open-btn>
+        <ion-icon name="reorder-two"></ion-icon>
+      </button>
+      <nav class="navbar" data-navbar>
+        <div class="navbar-top">
+          <a href="./index.html" class="logo">
+            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="62" alt="SptSoul logo">
+          </a>
+          <button class="menu-close-btn" data-menu-close-btn>
+            <ion-icon name="close-outline"></ion-icon>
+          </button>
+        </div>
+        <ul class="navbar-list">
+          <li><a href="./index.html" class="navbar-link">Home</a></li>
+          <li><a href="./all-packs.html" class="navbar-link active">All Packs</a></li>
+          <li><a href="#" class="navbar-link">My Songs</a></li>
+          <li><a href="#" class="navbar-link">Merch</a></li>
+          <li><a href="#" class="navbar-link">Bio</a></li>
+          <li><a id="cart-modal-btn" href="#" class="navbar-link">Cart</a></li>
+        </ul>
+        <ul class="navbar-social-list">
+          <li><a href="#" class="navbar-social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="navbar-social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="navbar-social-link"><ion-icon name="logo-pinterest"></ion-icon></a></li>
+          <li><a href="#" class="navbar-social-link"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="#" class="navbar-social-link"><ion-icon name="logo-youtube"></ion-icon></a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ALL PACKS SECTION (spaced below header via CSS) -->
+   <br>
+   <br>
+   <br>
+   <br>
+   <br>
+  <main class="container all-packs-page">
+    <h1 class="h2 section-title">All Packs</h1>
+    <ul id="all-packs-list" class="movies-list">
+      <!-- Products are injected here -->
+    </ul>
+    <style>
+        .modal-content {
+          background: #111;
+          padding: 2rem;
+          border-radius: 12px;
+          max-width: 480px;
+          width: 90%;
+          color: #fff;
+          max-height: 90vh;
+          overflow-y: auto;
+          box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+          animation: fadeInModal 0.25s ease-out forwards;
+        }
+        @keyframes fadeInModal {
+          from { opacity: 0; transform: scale(0.9); }
+          to   { opacity: 1; transform: scale(1); }
+        }
+        .modal-close {
+          font-size: 1.75rem;
+          opacity: 0.8;
+          transition: opacity 0.2s;
+        }
+        .modal-close:hover {
+          opacity: 1;
+        }
+        #modal-add-to-cart {
+          margin-top: 1.5rem;
+          width: 100%;
+          padding: 0.75rem;
+          font-size: 1rem;
+          border-radius: 6px;
+          transition: background 0.2s, transform 0.2s;
+        }
+        #modal-add-to-cart:hover {
+          background: #f5d000;
+          color: #111;
+          transform: translateY(-2px);
+        }
+      </style>
+      
+  </main>
+
+  <!-- PRODUCT MODAL (same as homepage) -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-content">
+      <button id="close-product-modal" class="modal-close">&times;</button>
+      <img id="modal-product-image" src="" alt="">
+      <h3 id="modal-product-title"></h3>
+      <span id="modal-product-badge" class="badge badge-fill"></span>
+      <p>Price: $<span id="modal-product-price"></span></p>
+      <div id="modal-audio-list"></div>
+      <button id="modal-add-to-cart" class="btn btn-primary">Add to Cart</button>
+    </div>
+  </div>
+
+  <!-- CART MODAL (same as homepage) -->
+  <div id="cart-modal" class="modal hidden">
+    <div class="modal-content cart-modal">
+      <button id="close-cart-modal" class="modal-close">&times;</button>
+      <header class="cart-modal__header">
+        <h3>Your Cart</h3>
+        <span id="cart-count">0 items</span>
+      </header>
+      <section class="cart-modal__body" id="cart-items">
+        <!-- Items injected here -->
+      </section>
+      <footer class="cart-modal__footer">
+        <div class="cart-total">
+          Total: $<span id="cart-total">0.00</span>
+        </div>
+        <button id="checkout-btn" class="btn btn-primary">Checkout</button>
+        <button id="download-btn" class="btn btn-primary" disabled>Download Full Pack</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- FOOTER (identical to index.html) -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="footer-brand-wrapper">
+          <a href="./index.html" class="logo">
+            <img src="./assets/images/rythmrack-logo-zip-file/svg/logo.png" height="100" alt="SPT Soul logo">
+          </a>
+          <ul class="footer-list">
+            <li><a href="./index.html" class="footer-link">Home</a></li>
+            <li><a href="./all-packs.html" class="footer-link">All Packs</a></li>
+            <li><a href="#" class="footer-link">My Beats</a></li>
+            <li><a href="#" class="footer-link">Merch</a></li>
+            <li><a href="#" class="footer-link">About</a></li>
+          </ul>
+        </div>
+        <div class="divider"></div>
+        <div class="quicklink-wrapper">
+          <ul class="quicklink-list">
+            <li><a href="#" class="quicklink-link">Faq</a></li>
+            <li><a href="#" class="quicklink-link">Help center</a></li>
+            <li><a href="#" class="quicklink-link">Terms of use</a></li>
+            <li><a href="#" class="quicklink-link">Privacy</a></li>
+          </ul>
+          <ul class="social-list">
+            <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-pinterest"></ion-icon></a></li>
+            <li><a href="#" class="social-link"><ion-icon name="logo-linkedin"></ion-icon></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p class="copyright">
+          &copy; 2025 SptSoul <small class="design">Designed by </small>
+          <a class="design" href="https://www.folafolio.dev/">Akinfolarin.D3v</a>.
+        </p>
+        <style>
+          .design {
+            background: linear-gradient(87.01deg, #6d9be3 3.39%, #aadfc1 32.8%, #f4cd63 61.74%, #eb672d 94.48%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+          }
+          .footer-bottom {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: hsl(0, 0%, 0%);
+            color: white;
+            text-align: center;
+            padding: 3px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .footer-bottom a {
+            color: white;
+            text-decoration: none;
+          }
+          .footer-bottom a:hover {
+            text-decoration: underline;
+          }
+          .footer-bottom .copyright {
+            margin: 0;
+          }
+        </style>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GO TO TOP -->
+  <a href="#top" class="go-top" data-go-top><ion-icon name="chevron-up"></ion-icon></a>
+
+  <!-- SCRIPTS (order matters!) -->
+  <!-- 1) Core script: modals & cart handlers -->
+  <script src="./assets/js/script.js" defer></script>
+  <!-- 2) All-Packs rendering logic -->
+  <script type="module" src="./assets/js/idb-helpers.js" defer></script>
+
+  <script src="./assets/js/all-packs.js" defer></script>
+  <!-- Icons -->
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <!-- Paystack (for checkout) -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</body>
+</html>
