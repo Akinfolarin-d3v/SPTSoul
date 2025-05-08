@@ -1,6 +1,7 @@
-#RythmRack
+#SPTSoul
 
-RythmRack is a sleek, customizable beat-selling website template for independent music producers. This repo includes all the code, assets, and docs you need to build a professional site to showcase and sell your beats.
+
+SPTSoul is a sleek, customizable beat-selling website template for independent music producers. This repo includes all the code, assets, and docs you need to build a professional site to showcase and sell your beats.
 
 Features
 Custom Design: Responsive HTML, CSS, and JS—easy to modify.
@@ -11,7 +12,7 @@ SEO-Optimized: Boost your online presence.
 Quick Setup: Launch your site in minutes.
 
 
-Live Demo: https://rythmrack.netlify.app/
+Live Demo:[ https://sptsoul.netlify.app/
 
 
 Customization
@@ -31,4 +32,5 @@ This project is licensed under the MIT License.
 Acknowledgments
 Thanks to online design communities and independent producers for the inspiration.
 
-<img width="1440" alt="Screenshot 2025-03-10 at 2 02 44 AM" src="https://github.com/user-attachments/assets/8da95edf-f95a-442d-b1f0-0c2e1c89312e" />
+![image](https://github.com/user-attachments/assets/766de5bb-72cc-4be0-9d15-33ce5a532779)
+
