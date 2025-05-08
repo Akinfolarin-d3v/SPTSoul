@@ -141,38 +141,60 @@
 
 
 
-<!-- Cart Modal -->
+<!-- CART MODAL -->
 <div id="cart-modal" class="modal hidden">
   <div class="modal-content cart-modal">
-    <button id="close-cart-modal" class="modal-close">&times;</button>
+    <button id="close-cart-modal" class="modal-close">☠</button>
+    <br>
 
-    <!-- Header -->
     <header class="cart-modal__header">
-      <h3> Your Cart </h3>
-      <span id="cart-count">  0 items</span>
+      <h3>Your Cart</h3>
+      <span id="cart-count">0 items</span>
     </header>
 
-    <!-- Body -->
     <section class="cart-modal__body" id="cart-items">
-      <!-- Items injected here -->
+      
     </section>
 
-    <!-- Footer -->
     <footer class="cart-modal__footer">
       <div class="cart-total">
-        Total: $<span id="cart-total">0.00</span>
+        <span>Total:</span>
+        <span id="cart-total">$0.00</span>
       </div>
-      <button id="checkout-btn" class="btn btn-primary">
-        Checkout
-      </button>
-      <br>
-      <button id="download-btn" class="btn btn-primary" disabled>
-        Download Pack
-      </button>
+      <div class="cart-actions">
+        <button id="checkout-btn" class="btn btn-outline">
+          <ion-icon name="checkmark-outline"></ion-icon>
+          Checkout
+        </button>
+        <button id="download-btn" class="btn btn-outline" disabled>
+          <ion-icon name="download-outline"></ion-icon>
+          Download
+        </button>
+      </div>
     </footer>
   </div>
 </div>
-
+<!-- PAYMENT CHOICE MODAL -->
+<div id="payment-modal" class="modal hidden">
+  <div class="modal-content payment-modal">
+    <button id="close-payment-modal" class="modal-close">&times;</button>
+    <h3 class="payment-modal__title">Choose Payment Method</h3>
+    <div class="payment-modal__options">
+      <button class="payment-btn" data-method="paystack">
+        <img src="./assets/images/paystack-icon.png" alt="Paystack" class="payment-btn__icon">
+        Paystack
+      </button>
+      <button class="payment-btn" data-method="paypal">
+        <img src="./assets/images/paypal-icon.png" alt="PayPal" class="payment-btn__icon">
+        PayPal
+      </button>
+      <button class="payment-btn" data-method="bitcoin">
+        <img src="./assets/images/bitcoin-ico.png" alt="Bitcoin" class="payment-btn__icon">
+        Bitcoin
+      </button>
+    </div>
+  </div>
+</div>
 
 
   <!-- MAIN SECTIONS -->
@@ -241,29 +263,18 @@
  <!-- Product Preview Modal (keep only this one!) -->
 <div id="product-modal" class="modal hidden">
  <div class="modal-content">
-   <!-- Close button -->
-   <button id="close-product-modal" class="modal-close">&times;</button>
-
-   <!-- Product image -->
+   <button id="close-product-modal" class="modal-close">☠ CLOSE</button>
+   <br>
    <img    id="modal-product-image" src="" alt="">
-
-   <!-- Title & badge -->
    <h3     id="modal-product-title"></h3>
    <span   id="modal-product-badge" class="badge badge-fill"></span>
-
-   <!-- Price -->
    <p>Price :$ <span id="modal-product-price"></span></p>
-
-   <!-- Audio demos list -->
    <div id="modal-audio-list"></div>
-
-   <!-- Add to cart button -->
    <button id="modal-add-to-cart" class="btn btn-primary">
      Add to Cart
    </button>
  </div>
  <style>
-   /* Make each card pop on hover/focus */
 .movie-card {
  border-radius: 8px;
  overflow: hidden;
@@ -277,7 +288,6 @@
  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
 }
 
-/* Slightly scale the banner image for a dynamic feel */
 .movie-card .card-banner img {
  transition: transform 0.4s ease;
 }
@@ -285,7 +295,6 @@
 .movie-card:hover .card-banner img {
  transform: scale(1.05);
 }
-/* Centered, card-style modal with fade-in */
 .modal-content {
  background: #111;                 
  padding: 2rem;                      
@@ -303,12 +312,10 @@
  to   { opacity: 1; transform: scale(1); }
 }
 
-/* Backdrop blur for extra polish */
 .modal {
  backdrop-filter: blur(4px);
 }
 
-/* Larger, clearer close button */
 .modal-close {
  font-size: 1.75rem;
  color: #f5f5f5;
@@ -319,7 +326,6 @@
  opacity: 1;
 }
 
-/* Title & badge tweaks */
 #modal-product-title {
  margin: 1rem 0 0.25rem;
  font-size: 1.6rem;
@@ -337,7 +343,6 @@
  border-radius: 4px;
 }
 
-/* Audio list spacing */
 #modal-audio-list .modal-audio-wrapper {
  margin-bottom: 1.2rem;
 }
@@ -350,7 +355,7 @@
  width: 100%;
  outline: none;
 }
-/* More distinctive “Add to Cart” button */
+
 #modal-add-to-cart {
  margin-top: 1.5rem;
  width: 100%;
@@ -366,7 +371,6 @@
  transform: translateY(-2px);
 }
 
-/* Improve body text readability */
 .modal-content p,
 .modal-content span,
 #modal-audio-list p {
@@ -390,14 +394,6 @@
 </div>
 
 
- <!-- Cart Modal -->
- <!-- <div id="cart-modal" class="modal hidden">
-   <div class="modal-content">
-     <span id="close-cart-modal" class="modal-close">&times;</span>
-     <h3>Your Cart</h3>
-     <div id="cart-items"></div>
-   </div>
- </div> -->
 
    <!-- Upcoming Section -->
    <section id="upcoming" class="upcoming">
@@ -422,7 +418,7 @@
    </section>
 
    <!-- TV Series Section -->
-   <section id="tv-series" class="tv-series">
+   <section id="best-beat" class="best-beat">
      <div class="container">
        <p class="section-subtitle">Best Beats</p>
        <h2 class="h2 section-title">Pack</h2>
@@ -586,7 +582,9 @@
   <a href="#top" class="go-top" data-go-top><ion-icon name="chevron-up"></ion-icon></a>
 
   <!-- Scripts -->
-  <script src="./assets/js/script.js" defer></script>
+  <script type="module" src="./assets/js/idb-helpers.js"></script>
+  <script type="module" src="./assets/js/script.js"></script>
+  <script type="module" src="./assets/js/all-packs.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

@@ -5,7 +5,7 @@ const bc = new BroadcastChannel('beatstore_channel');
 // ─── IndexedDB Helpers ────────────────────────────────────────────────────────
 function openDB() {
   return new Promise((res, rej) => {
-    const rq = indexedDB.open('BeatStoreDB', 2);
+    const rq = indexedDB.open('BeatStoreDB', 1);
     rq.onupgradeneeded = e => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains('products')) {

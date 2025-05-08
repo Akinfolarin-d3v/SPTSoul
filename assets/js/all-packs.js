@@ -1,9 +1,11 @@
 'use strict';
 
+// 
+
 // ─── INDEXEDDB HELPERS ─────────────────────────────────────────────────────────
 function openDB() {
   return new Promise((res, rej) => {
-    const rq = indexedDB.open('BeatStoreDB', 2);
+    const rq = indexedDB.open('BeatStoreDB', 3);
     rq.onupgradeneeded = e => {
       const db = e.target.result;
       if (!db.objectStoreNames.contains('products'))
@@ -77,7 +79,7 @@ function openProductModal(p) {
   });
 
   document.getElementById('modal-add-to-cart').onclick = async () => {
-    await saveCartItem({
+    await idbAdd('cart',{
       title: p.title,
       price: p.price,
       demos: p.demos.map(d => d.url),
@@ -91,13 +93,19 @@ function openProductModal(p) {
 }
 
 // Close product modal
-document.getElementById('close-product-modal').onclick = () => {
-  document.getElementById('product-modal').classList.add('hidden');
-};
 
-// ─── CART MODAL (reuse same logic) ─────────────────────────────────────────────
+const closeBtn = document.getElementById('close-product-modal');
+if (closeBtn) {
+  closeBtn.onclick = () => {
+    document.getElementById('close-product-modal').onclick = () => {
+      document.getElementById('product-modal').classList.add('hidden');
+    };
+  };
+}
+
+// ─── CART MODAL LOGIC ───────────────────────────────────────────────────────────
 document.getElementById('cart-modal-btn').onclick = async () => {
-  const cart    = await getCart();
+  const cart = await idbGetAll('cart');
   const ct      = document.getElementById('cart-items');
   const cc      = document.getElementById('cart-count');
   const totalEl = document.getElementById('cart-total');
@@ -109,27 +117,93 @@ document.getElementById('cart-modal-btn').onclick = async () => {
     totalEl.textContent = '0.00';
     dlBtn.disabled      = true;
   } else {
+    // 1) Build HTML with custom audio-player wrappers
     ct.innerHTML = cart.map(it => `
       <div class="cart-item" data-id="${it.id}">
-        <h4>${it.title}<button class="remove-item-btn">&times;</button></h4>
+        <h4>
+          <span class="item-title">${it.title}</span>
+        
+          <button class="remove-item-btn"><ion-icon name="trash-outline"></ion-icon></button>
+        </h4>
         <div class="demo-list">
-          ${it.demos.map(u => `<audio controls src="${u}"></audio>`).join('')}
+          ${it.demos.map(d => `
+            <div class="audio-player">
+              <button class="btn btn-primary play-btn">
+              <ion-icon name="play-circle-outline"></ion-icon>
+                
+                <span class="file-price">$${it.price.toFixed(2)}</span>
+              </button>
+              <audio src="${d.url}"></audio>
+            </div>
+          `).join('')}
         </div>
       </div>
     `).join('');
+
+        
+    ct.querySelectorAll('.remove-item-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const id = Number(btn.closest('.cart-item').dataset.id);
+        await idbDelete('cart', id);
+        document.getElementById('cart-modal-btn').click();
+      });
+    });
+
+    ct.querySelectorAll('.audio-player').forEach(player => {
+      const btn = player.querySelector('.play-btn');
+      const audio = player.querySelector('audio');
+      btn.addEventListener('click', () => {
+        if (audio.paused) {
+          audio.play();
+          btn.querySelector('ion-icon').name = 'pause-circle-outline';
+        } else {
+          audio.pause();
+          btn.querySelector('ion-icon').name = 'play-circle-outline';
+        }
+      });
+    });
+    
+        
+  
     cc.textContent       = `${cart.length} ${cart.length === 1 ? 'item' : 'items'}`;
     totalEl.textContent  = cart.reduce((sum, it) => sum + it.price, 0).toFixed(2);
     dlBtn.disabled       = true;
-
+  
+    // 2) Remove handlers
     ct.querySelectorAll('.remove-item-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const id = Number(btn.closest('.cart-item').dataset.id);
         await deleteCartItem(id);
-        document.getElementById('cart-modal-btn').click();
+        document.getElementById('cart-modal-btn').click(); // refresh
       });
     });
+  
+    // 3) Initialize play/pause on each audio-player
+    ct.querySelectorAll('.audio-player').forEach(player => {
+      const btn = player.querySelector('.play-btn');
+      const audio = player.querySelector('audio');
+    
+      btn.addEventListener('click', () => {
+        // toggle play/pause
+        if (audio.paused) {
+          audio.play();
+          btn.classList.add('playing');
+          btn.querySelector('ion-icon')?.setAttribute('name', 'pause-circle-outline');
+        } else {
+          audio.pause();
+          btn.classList.remove('playing');
+          btn.querySelector('ion-icon')?.setAttribute('name', 'play-circle-outline');
+        }
+      });
+      
+      audio.addEventListener('ended', () => {
+        btn.classList.remove('playing');
+        btn.querySelector('ion-icon')?.setAttribute('name', 'play-circle-outline');
+      });
+    });
+    
   }
-
+  
   document.getElementById('cart-modal').classList.remove('hidden');
 };
 
@@ -168,16 +242,19 @@ async function renderAllPacks() {
     card.addEventListener('click', () => {
       const id = Number(card.dataset.id);
       const prod = prods.find(x => x.id === id);
+      
       openProductModal(prod);
     });
   });
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  // Detect which page we're on
-  if (document.getElementById('all-packs-list')) {
+  const allPacksList = document.getElementById('all-packs-list');
+
+  if (allPacksList) {
+  
     renderAllPacks();
-  } else {
-    renderProducts();
   }
+
 });
+

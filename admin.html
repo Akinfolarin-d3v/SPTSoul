@@ -110,7 +110,7 @@
             <a href="#" class="navbar-link">Bio</a>
           </li>
           <li>
-            <a id="cart-modal-btn" href="#" class="navbar-link">Cart</a>
+            <a id="cart-modal-btn" href="" class="navbar-link">Cart</a>
           </li>
 
         </ul>
@@ -153,8 +153,11 @@
 
     </div>
   </header>
-
+  <br>
+  <br>
+  <br>
   <main class="admin-container">
+    
     <section id="login-section">
       <h2>Admin Login</h2>
       <div id="login-error" class="error-message"></div>
@@ -171,8 +174,12 @@
       </form>
     </section>
 
+    <br>
+    <br>
+
+
     <section id="product-section" class="hidden">
-      <h2>Manage Products</h2>
+      <h2 font="white">Manage Products</h2>
       <div id="product-error" class="error-message"></div>
       <form id="product-form">
         <div class="form-group">
@@ -181,7 +188,7 @@
             <option value="">Choose…</option>
             <option value="upcoming">New Pack</option>
             <option value="top-rated">Top Rated</option>
-            <option value="tv-series">Best Beats</option>
+            <option value="best-beat">Best Beats</option>
           </select>
         </div>
         <div class="form-group">
@@ -413,11 +420,15 @@
     });
   </script>
 
- 
+   <!-- GO TO TOP -->
+   <a href="#top" class="go-top" data-go-top><ion-icon name="chevron-up"></ion-icon></a>
 
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  
+<script src="./assets/js/idb-helpers.js" defer></script>
+<script src="./assets/js/admin.js" defer></script>
+<script src="./assets/js/script.js" defer></script>
+<script src="./assets/js/all-packs.js"   defer></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script type="module" src="idb-helpers.js"></script>
-  <script src="./assets/js/admin.js" defer></script>
 </body>
 </html>

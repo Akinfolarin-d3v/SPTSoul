@@ -225,33 +225,6 @@ body.active { overflow: hidden; }
   color: var(--citrine);
 }
 
-/**
- * BUTTONS
- */
-
-.btn {
-  color: var(--white);
-  font-size: var(--fs-11);
-  font-weight: var(--fw-700);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 16px 30px;
-  border: 2px solid var(--citrine);
-  border-radius: 50px;
-  transition: var(--transition-1);
-}
-
-.btn > ion-icon { font-size: 18px; }
-
-.btn-primary { background: var(--rich-black-fogra-29); }
-
-.btn-primary:is(:hover, :focus) {
-  background: var(--citrine);
-  color: var(--xiketic);
-}
 
 /**
  * MOVIE CARD
@@ -513,20 +486,20 @@ body.active { overflow: hidden; }
 
 .hero-content {  
   display: flex;
-  flex-direction: column; /* Stack elements vertically */
-  align-items: center; /* Center horizontally */
-  justify-content: center; /* Center vertically */
-  height: 100vh; /* Default: Full screen height */
-  width: 90%; /* Ensures it scales well */
-  max-width: 1200px; /* Prevents it from stretching too wide */
-  margin: auto; /* Centers it horizontally */
-  text-align: center; /* Ensure text is centered */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+  width: 90%; 
+  max-width: 1200px; 
+  margin: auto;
+  text-align: center; 
 }
 
 /* Adjust height for tablets & small laptops */
 @media (min-width: 768px) {  
   .hero-content {  
-    height: 80vh; /* Slightly shorter for medium screens */
+    height: 80vh; 
   }
 }
 
@@ -800,14 +773,14 @@ body.active { overflow: hidden; }
  * #TV SEREIS
 \*-----------------------------------*/
 
-.tv-series {
+.best-beat {
   background: url("../images/tv-series-bg.jpg") no-repeat;
   background-size: cover;
   background-position: center;
   padding-block: var(--section-padding);
 }
 
-.tv-series .section-title { margin-bottom: 50px; }
+.best-beat .section-title { margin-bottom: 50px; }
 
 
 
@@ -879,7 +852,7 @@ body.active { overflow: hidden; }
 \*-----------------------------------*/
 
 .footer-top {
-  background: url("..images/rythmrack-logo-zip-file/png/logo-no-background.png") no-repeat;
+  /* background: url("../images/rythmrack-logo-zip-file/png/logo.png") no-repeat; */
   background-size: cover;
   background-position: center;
   padding-block: 80px 50px;
@@ -1689,12 +1662,13 @@ body.active { overflow: hidden; }
 
 .modal {
   position: fixed;
-  inset: 0;                           /* top/right/bottom/left: 0 */
+  inset: 0;                         
   background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
+  
 }
 
 .modal.hidden {
@@ -1752,65 +1726,278 @@ body.active { overflow: hidden; }
 }
 
 
-
-/* Cart Modal */
-.cart-modal {
-  align-items: auto;
-  justify-content: space-between;
-  
-}
-.cart-modal__body .cart-item {
-  position: relative;
-  padding: 1rem 0;
-  border-bottom: 1px solid var(--citrine);
-}
-.cart-modal__header{
-  color: var(--citrine);
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--citrine);
-  padding-bottom: 40px;
-  padding-top: 40px;
-
+/* Cart Items */
+/* Modal container tweaks */
+.cart-modal .modal-content {
+  max-width: 500px;
+  width: 90%;
+  padding: 1.5rem;
+  background: #111;
+  border-radius: 12px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
 
-.cart-item h4 {
-  margin: 0 0 0.5rem;
-  color: var(--citrine);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.cart-item .remove-item-btn {
+/* Close button */
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
   background: none;
   border: none;
-  color: #e74c3c;
-  font-size: 1.2rem;
+  color: #fff;
   cursor: pointer;
 }
 
-.cart-item .demo-list audio {
-  width: 100%;
-  height: 30px;
-  margin-bottom: 0.5rem;
-  background: #444;
-  border-radius: 4px;
+/* Header */
+.cart-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--citrine);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  color: var(--citrine);
 }
 
-/* Total & Buttons */
-.cart-modal__footer {
+/* Body & items */
+.cart-modal__body {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+.cart-item {
+  position: relative;
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+}
+.item-info {
+  flex: 1;
+  
+}
+.item-title {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+}
+.item-price {
+  display: block;
+  color: var(--citrine);
+  font-weight: bold;
+  margin-top: 0.25rem;
+}
+.remove-item-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--white);
+  font-size: 1.2rem;
+  padding: 0;
+  margin-left: 350px;
+  margin-top: -28px;
+ z-index: 9999;
+  position: absolute;
+}
+
+.remove-item-btn:hover {
+  color: rgb(163, 6, 6);
+}
+
+.remove-item-btn ion-icon {
+  pointer-events: none;
+}
+
+/* Demo list & audio player */
+.demo-list {
+  margin-left: 1rem;
+}
+.audio-player {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.play-btn {
+  flex: none;
+  width: auto;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.play-btn .file-name {
+  font-weight: bold;
+  color: var(--white);
+}
+
+.play-btn .file-price {
+  font-size: 0.75rem;
+  color: var(--citrine);
+}
+
+
+/* Footer */
+.cart-modal__footer {
+  border-top: 1px solid var(--citrine);
+  padding-top: 1rem;
 }
 .cart-total {
-  flex: 1;
-  color: var(--citrine);;
-  font-size: 1.1rem;
-  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--citrine);
+  margin-bottom: 1rem;
+
+}
+.cart-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.btn {
+  color: var(--citrine);
+  font-size: var(--fs-11);
+  font-weight: var(--fw-700);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border: 2px solid var(--citrine);
+  border-radius: 50px;
+  transition: var(--transition-1);
+  cursor: pointer;
+}
+.btn > ion-icon {
+  font-size: 18px;
+}
+
+
+.btn-outline {
+  background: transparent;
+  color: var(--citrine);
+}
+.btn-outline:hover,
+.btn-outline:focus {
+  background: var(--citrine);
+  color: var(--xiketic);
+}
+
+
+/* -----------------------------------------
+   Audio Player Overrides in Cart & Modal
+----------------------------------------- */
+
+/* Wrapper stays centered and sized to content */
+.audio-player {
+  display: inline-flex;      /* inline instead of block flex */
+  flex: none !important;     /* don’t grow or shrink */
+  width: auto !important;    /* no inherited width */
+  margin-bottom: 1rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+
+/* Hide the native audio element */
+.audio-player audio {
+  display: none;
+}
+
+/* Very small play button */
+.audio-player .play-btn {
+  /* override any full-width */
+  width: auto !important;
+  flex: none !important;
+  padding: 4px 8px !important;       /* tiny padding */
+  font-size: 0.65rem !important;      /* small text */
+  border-radius: 20px !important;     /* small pill */
+}
+
+/* Even smaller icon */
+.audio-player .play-btn {
+  flex: none !important;
+  width: auto !important;
+  padding: 4px 8px !important;
+  font-size: 0.65rem !important;
+  border-radius: 20px !important;
+}
+
+
+/* Ensure demo-list centers its players without stretching */
+.cart-item .demo-list {
+  width: auto !important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Target only play buttons inside audio-player containers */
+.audio-player .btn.btn-primary.play-btn {
+  padding: 8px 12px;       /* increase padding for a bit more click area */
+  font-size: 0.85rem;      /* slightly larger text/icon */
+  min-width: 40px;         /* ensure a minimal width */
+  height: auto;            /* allow height to adjust */
+  line-height: 1;          /* tighten line-height */
+}
+
+/* Optionally adjust the ion-icon inside play buttons */
+.audio-player .btn.btn-primary.play-btn ion-icon {
+  font-size: 1.2rem;       /* slightly larger icon */
+}
+
+/* Payment Choice Modal */
+.payment-modal {
+  max-width: 360px;
+  width: 90%;
+  padding: 1.5rem;
+  background: #111;
+  text-align: center;
+}
+
+.payment-modal__title {
+  margin-bottom: 1rem;
+  color: var(--citrine);
+}
+
+.payment-modal__options {
+  display: flex;
   justify-content: space-between;
-  padding-top: 40px;
+  gap: 0.5rem;
+}
+
+.payment-btn {
+  flex: 1;
+  background: var(--rich-black-fogra-29);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.payment-btn:hover {
+  transform: scale(0.95);
+}
+
+.payment-btn__icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
 }
